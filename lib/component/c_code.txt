@@ -1,0 +1,128 @@
+#include <ESP32Firebase.h>
+#include <Adafruit_Sensor.h>
+#include <DHT.h>
+#include <WebServer.h>
+
+
+// Bu qismda ESP32 wifi hosil qiladi.
+const char* ssid = "ESP32WIFI";
+const char* password = "12345678";
+WebServer server(80);
+
+#define REFERENCE_URL "https://iotproject-4ae18-default-rtdb.asia-southeast1.firebasedatabase.app/"
+
+// DHT11 ga D27 oyoqchadan pin yuborish
+#define DHTPIN 27
+
+#define LEDONEPIN 32  //led 1
+#define RELEPIN 33    //rele
+
+//Xonalar
+#define ROOM1 25  //DEVICE 1
+#define ROOM2 26  //DEVICE 2
+#define ROOM3 13  //DEVICE 3
+#define ROOM4 14  //DEVICE 4
+
+#define DHTTYPE DHT11  // DHT 11
+
+
+DHT dht(DHTPIN, DHTTYPE);
+Firebase firebase(REFERENCE_URL);
+
+float readDHTTemperature() {
+  float t = dht.readTemperature();
+  if (isnan(t)) {
+    return 0.0;
+  } else {
+    return t;
+  }
+}
+
+float readDHTHumidity() {
+  float h = dht.readHumidity();
+  if (isnan(h)) {
+    return 0.0;
+  } else {
+    return h;
+  }
+}
+
+void handleRoot() {
+  String ssid = server.arg("ssid");
+  String password = server.arg("password");
+  WiFi.begin(ssid.c_str(), password.c_str());
+  server.send(200, "text/plain", "Wi-Fi credentials received");
+}
+
+void redLedSwitch() {
+  digitalWrite(LEDONEPIN, HIGH);
+  delay(800);
+  digitalWrite(LEDONEPIN, LOW);
+  delay(800);
+}
+
+void _redLedSwitch() {
+  digitalWrite(LEDONEPIN, HIGH);
+}
+
+
+void malumotTemperatura(float temperature) {
+  if (temperature <= 30.0 && temperature >= 20.0) {
+    firebase.setString("ESP32/DHT11/malumotTemperatura", "Normal");
+  }else if(temperature > 30.0){
+    firebase.setString("ESP32/DHT11/malumotTemperatura", "Hot");    
+  }else if(temperature < 20.0 && temperature > 5.0){
+    firebase.setString("ESP32/DHT11/malumotTemperatura", "Cool");    
+  }else if(temperature <= 5.0){
+    firebase.setString("ESP32/DHT11/malumotTemperatura", "Cold");    
+  } 
+}
+
+void setup() {
+  pinMode(LEDONEPIN, OUTPUT);
+  pinMode(RELEPIN, OUTPUT);
+
+  //Xonalar
+  pinMode(ROOM1, OUTPUT);
+  pinMode(ROOM2, OUTPUT);
+  pinMode(ROOM3, OUTPUT);
+  pinMode(ROOM4, OUTPUT);
+
+  digitalWrite(RELEPIN, HIGH);
+  Serial.begin(115200);
+  WiFi.softAP(ssid, password);
+  Serial.println("Access Point IP address: " + WiFi.softAPIP().toString());
+  server.on("/", HTTP_POST, handleRoot);
+  server.begin();
+
+  while (WiFi.status() != WL_CONNECTED) {
+    redLedSwitch();
+    server.handleClient();
+  }
+  _redLedSwitch();
+  Serial.print(WiFi.localIP());
+  // ==================== Shu qo'shildi ====================
+  firebase.setFloat("ESP32/DHT11/savedTemperature", readDHTTemperature());
+}
+
+void loop() {
+
+  firebase.setString("ESP32/DHT11/device", "connected");
+
+//=================== get ssid and password from mobile app ===================
+  server.handleClient();
+
+//=================== sending the temperature ===================
+  firebase.setFloat("ESP32/DHT11/temperature", readDHTTemperature());
+  
+  firebase.setFloat("ESP32/DHT11/humidity", readDHTHumidity());
+//=========================== Device of room ===========================
+  digitalWrite(ROOM1, firebase.getInt("ESP32/Bed Room/lamp"));
+  digitalWrite(ROOM2, firebase.getInt("ESP32/Bed Room/tv"));
+  digitalWrite(ROOM3, firebase.getInt("ESP32/Bed Room/conditioner"));
+  digitalWrite(ROOM4, firebase.getInt("ESP32/Bed Room/ventilator"));
+//=========================== Rele ===========================
+  digitalWrite(RELEPIN, firebase.getInt("ESP32/DHT11/rele"));
+
+  malumotTemperatura(firebase.getFloat("ESP32/DHT11/temperature"));
+}

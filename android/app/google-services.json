@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "319070808679",
+    "firebase_url": "https://iotproject-4ae18-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "iotproject-4ae18",
+    "storage_bucket": "iotproject-4ae18.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319070808679:android:6bd4f1ba816321ef1302c2",
+        "android_client_info": {
+          "package_name": "com.example.iot"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMtbvRAejpkXqfWPba7LMpZcJTRCx1Svo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319070808679:android:b0ca1fc09cb4f1bf1302c2",
+        "android_client_info": {
+          "package_name": "com.example.oldiot"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMtbvRAejpkXqfWPba7LMpZcJTRCx1Svo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
