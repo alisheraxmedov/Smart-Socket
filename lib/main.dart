@@ -33,18 +33,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       onGenerateRoute: onGenerateRoute,
       theme: themeData(context) ,
-      // ThemeData(
-      //   appBarTheme: const AppBarTheme(
-      //     centerTitle: true,
-      //     titleTextStyle: TextStyle(
-      //       color: ColorsClass.white,
-      //     ),
-      //     iconTheme: IconThemeData(
-      //       color: ColorsClass.white,
-      //     ),
-      //   ),
-      // ),
-      // home: SettingsScreen(),
     );
   }
 }

@@ -42,18 +42,6 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => const SplashScreen(),
       );
-    // case AuthGate.routeName:
-    //   return MaterialPageRoute(
-    //     builder: (context) => const AuthGate(),
-    //   );
-    // case Home.routeName:
-    //   return MaterialPageRoute(
-    //     builder: (context) => const Home(),
-    //   );
-    // case WifiConfigPage.routeName:
-    //   return MaterialPageRoute(
-    //     builder: (context) => const WifiConfigPage(),
-    //   );
     default:
       return MaterialPageRoute(
         builder: (context) => const Scaffold(
