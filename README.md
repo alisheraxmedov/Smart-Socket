@@ -1,5 +1,5 @@
 # oldiot
-
+Before using the application, add your own (firebase_options.dart) file to the project
 A new Flutter project.
 
 ## Getting Started
