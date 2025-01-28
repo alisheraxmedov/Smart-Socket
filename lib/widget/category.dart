@@ -107,7 +107,7 @@ class BasicPartButton extends StatelessWidget {
                 shape: BoxShape.circle,
                 color: Provider.of<ProviderClass>(context, listen: false)
                             .realtimeData["rele"] ==
-                        0
+                        1
                     ? ColorsClass.white
                     : ColorsClass.blue,
               ),
